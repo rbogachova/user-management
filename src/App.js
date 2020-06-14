@@ -70,6 +70,7 @@ function App() {
                                       text={user.website}/>
                             <GridCell readOnly={false}
                                       text={user.company.name}/>
+                            <button>edit</button>
                         </tr>
                     )
                 }
