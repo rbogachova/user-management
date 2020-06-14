@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import axios from 'axios';
 import GridCell from "./GridCell";
+import GridRow from "./GridRow";
 
 function App() {
     const [users, setUsers] = useState([]);
@@ -31,15 +32,14 @@ function App() {
                     <tr>
                         <th>ID</th>
                         <th>Name</th>
-                        <th>User Name</th>
                         <th>Email</th>
                         <th>Street</th>
                         <th>Suite</th>
                         <th>City</th>
                         <th>Zip</th>
-                        <th>Phone</th>
                         <th>Website</th>
                         <th>Company</th>
+                        <th/>
                     </tr>
                     </thead>
                 }
@@ -47,31 +47,8 @@ function App() {
                 <tbody>
                 {
                     users.map(user =>
-                        <tr key={user.id}>
-                            <GridCell readOnly={true}
-                                      text={user.id}/>
-                            <GridCell readOnly={false}
-                                      text={user.name}/>
-                            <GridCell readOnly={false}
-                                      text={user.username}/>
-                            <GridCell readOnly={false}
-                                      text={user.email}/>
-                            <GridCell readOnly={false}
-                                      text={user.address.street}/>
-                            <GridCell readOnly={false}
-                                      text={user.address.suite}/>
-                            <GridCell readOnly={false}
-                                      text={user.address.city}/>
-                            <GridCell readOnly={false}
-                                      text={user.address.zipcode}/>
-                            <GridCell readOnly={false}
-                                      text={user.phone}/>
-                            <GridCell readOnly={false}
-                                      text={user.website}/>
-                            <GridCell readOnly={false}
-                                      text={user.company.name}/>
-                            <button>edit</button>
-                        </tr>
+                        <GridRow key={user.id}
+                                 user={user}/>
                     )
                 }
                 </tbody>
