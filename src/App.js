@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import axios from 'axios';
-import GridCell from "./GridCell";
 import GridRow from "./GridRow";
 
 function App() {
