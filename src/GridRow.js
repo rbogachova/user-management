@@ -43,7 +43,6 @@ function GridRow(props) {
 
     const renderEditModeCells = () =>
         <>
-            <td>{savedUser.id}</td>
             <td>
                 <input type="text"
                        value={editingUser.name}
@@ -110,6 +109,12 @@ function GridRow(props) {
             </td>
             <td>
                 <input type="text"
+                       value={editingUser.phone}
+                       onChange={e => setEditingUser({...editingUser, phone: e.target.value})}
+                       onKeyPress={onEnterPress}/>
+            </td>
+            <td>
+                <input type="text"
                        value={editingUser.website}
                        onChange={e => setEditingUser({...editingUser, website: e.target.value})}
                        onKeyPress={onEnterPress}/>
@@ -132,7 +137,6 @@ function GridRow(props) {
 
     const renderReadOnlyModeCells = () =>
         <>
-            <td>{savedUser.id}</td>
             <td>{savedUser.name}</td>
             <td><a href={`mailto:${savedUser.email}`}>{savedUser.email}</a></td>
             <td>
@@ -141,6 +145,7 @@ function GridRow(props) {
                 <strong>City:</strong> {savedUser.address.city}<br/>
                 <strong>Zip:</strong> {savedUser.address.zipcode}
             </td>
+            <td>{savedUser.phone}</td>
             <td><a href={`http://${savedUser.website}`}>{savedUser.website}</a></td>
             <td>{savedUser.company.name}</td>
             <td>

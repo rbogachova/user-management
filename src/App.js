@@ -3,23 +3,38 @@ import axios from 'axios';
 import GridRow from "./GridRow";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
+import {v4 as uuidv4} from 'uuid';
 
 function App() {
     const [users, setUsers] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
     const [addUserModalActive, setAddUserModalActive] = useState(false);
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [company, setCompany] = useState('');
 
     const loadUsers = () => {
+        setIsLoading(true);
         axios({
             method: 'get',
             url: 'https://jsonplaceholder.typicode.com/users',
         })
             .then((response) => {
                 setUsers(response.data);
+                setIsLoading(false);
             });
     };
 
     const renderLoadUsersButton = () =>
-        <button className="btn btn-primary mb-3" onClick={loadUsers}>Load Users</button>;
+        <button className="btn btn-primary mb-3" onClick={loadUsers}>
+            {isLoading
+                ?
+                <>
+                    <span class="spinner-border spinner-border-sm"/>
+                    Loading...
+                </>
+                : 'Load Users'}
+        </button>;
 
     const renderAddUserButton = () =>
         <>
@@ -31,29 +46,24 @@ function App() {
                 <Modal.Body>
                     <table>
                         <tr>
-                            <td><strong>Name: </strong></td>
-                            <td><input type="text"/></td>
+                            <td><strong>Name*: </strong></td>
+                            <td><input type="text" onChange={e => setName(e.target.value)}/></td>
                         </tr>
                         <tr>
-                            <td><strong>Email: </strong></td>
-                            <td><input type="text"/></td>
+                            <td><strong>Email*: </strong></td>
+                            <td><input type="text" onChange={e => setEmail(e.target.value)}/></td>
                         </tr>
                         <tr>
-                            <td><strong>Address: </strong></td>
-                            <td><input type="text"/></td>
-                        </tr>
-                        <tr>
-                            <td><strong>Website: </strong></td>
-                            <td><input type="text"/></td>
-                        </tr>
-                        <tr>
-                            <td><strong>Company: </strong></td>
-                            <td><input type="text"/></td>
+                            <td><strong>Company*: </strong></td>
+                            <td><input type="text" onChange={e => setCompany(e.target.value)}/></td>
                         </tr>
                     </table>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="primary" onClick={handleAddUserButtonClick}>OK</Button>
+                    <Button variant="primary" onClick={addUser}
+                            disabled={name.trim().length < 3 || email.trim().length < 3 || company.trim().length < 3}>
+                        OK
+                    </Button>
                     <Button variant="secondary" onClick={handleCloseModal}>Cancel</Button>
                 </Modal.Footer>
             </Modal>
@@ -67,8 +77,27 @@ function App() {
         setAddUserModalActive(false);
     };
 
-    const handleAddUserButtonClick = () => {
+    const addUser = () => {
         setAddUserModalActive(false);
+        const updatedUsers = [...users];
+        updatedUsers.unshift(
+            {
+                id: uuidv4(),
+                name: name,
+                email: email,
+                address: {
+                    street: null,
+                    suite: null,
+                    city: null,
+                    zipcode: null,
+                },
+                phone: null,
+                website: null,
+                company: {
+                    name: company
+                }
+            });
+        setUsers(updatedUsers);
     };
 
     const deleteUser = (userId) => {
@@ -87,10 +116,10 @@ function App() {
                     users.length !== 0 &&
                     <thead className="thead-light">
                     <tr>
-                        <th>ID</th>
                         <th>Name</th>
                         <th>Email</th>
                         <th>Address</th>
+                        <th>Phone</th>
                         <th>Website</th>
                         <th>Company</th>
                         <th/>
