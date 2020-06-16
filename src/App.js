@@ -71,6 +71,9 @@ function App() {
 
     const handleShowModal = () => {
         setAddUserModalActive(true);
+        setName('');
+        setEmail('');
+        setCompany('');
     };
 
     const handleCloseModal = () => {
@@ -78,7 +81,7 @@ function App() {
     };
 
     const addUser = () => {
-        setAddUserModalActive(false);
+        handleCloseModal();
         const updatedUsers = [...users];
         updatedUsers.unshift(
             {
