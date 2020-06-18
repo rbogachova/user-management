@@ -1,29 +1,13 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import GridRow from "./GridRow";
-import Modal from "react-bootstrap/Modal";
-import Button from "react-bootstrap/Button";
+import AddUserModal from "./AddUserModal";
 import {v4 as uuidv4} from 'uuid';
 
 function App() {
     const [users, setUsers] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
-    const [addUserModalActive, setAddUserModalActive] = useState(false);
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [company, setCompany] = useState('');
-
-    const loadUsers = () => {
-        setIsLoading(true);
-        axios({
-            method: 'get',
-            url: 'https://jsonplaceholder.typicode.com/users',
-        })
-            .then((response) => {
-                setUsers([...users, ...response.data]);
-                setIsLoading(false);
-            });
-    };
+    const [isAddUserModalActive, setIsAddUserModalActive] = useState(false);
 
     useEffect(() => {
         window.addEventListener('scroll', handleScroll);
@@ -37,13 +21,24 @@ function App() {
 
         if ((innerHeight + scrollTop) !== offsetHeight) return;
         setIsLoading(true);
-         console.log('Load more');
     };
 
     useEffect(() => {
         if (!isLoading) return;
         loadUsers();
     }, [isLoading]);
+
+    const loadUsers = () => {
+        setIsLoading(true);
+        axios({
+            method: 'get',
+            url: 'https://jsonplaceholder.typicode.com/users',
+        })
+            .then((response) => {
+                setUsers([...users, ...response.data]);
+                setIsLoading(false);
+            });
+    };
 
     const renderLoadUsersButton = () =>
         <button className="btn btn-primary mb-3" onClick={loadUsers}>
@@ -59,49 +54,16 @@ function App() {
     const renderAddUserButton = () =>
         <>
             <button className="btn btn-primary mr-2 mb-3" onClick={handleShowModal}>Add User</button>
-            <Modal show={addUserModalActive} onHide={handleCloseModal}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Add user</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <table>
-                        <tr>
-                            <td><strong>Name*: </strong></td>
-                            <td><input type="text" onChange={e => setName(e.target.value)}/></td>
-                        </tr>
-                        <tr>
-                            <td><strong>Email*: </strong></td>
-                            <td><input type="text" onChange={e => setEmail(e.target.value)}/></td>
-                        </tr>
-                        <tr>
-                            <td><strong>Company*: </strong></td>
-                            <td><input type="text" onChange={e => setCompany(e.target.value)}/></td>
-                        </tr>
-                    </table>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="primary" onClick={addUser}
-                            disabled={name.trim().length < 3 || email.trim().length < 3 || company.trim().length < 3}>
-                        OK
-                    </Button>
-                    <Button variant="secondary" onClick={handleCloseModal}>Cancel</Button>
-                </Modal.Footer>
-            </Modal>
+            <AddUserModal addUser={addUser}
+                          isAddUserModalActive={isAddUserModalActive}
+                          handleCloseModal={handleCloseModal}/>
         </>;
 
     const handleShowModal = () => {
-        setAddUserModalActive(true);
-        setName('');
-        setEmail('');
-        setCompany('');
+        setIsAddUserModalActive(true);
     };
 
-    const handleCloseModal = () => {
-        setAddUserModalActive(false);
-    };
-
-    const addUser = () => {
-        handleCloseModal();
+    const addUser = (name, email, company) => {
         const updatedUsers = [...users];
         updatedUsers.unshift(
             {
@@ -121,6 +83,10 @@ function App() {
                 }
             });
         setUsers(updatedUsers);
+    };
+
+    const handleCloseModal = () => {
+        setIsAddUserModalActive(false);
     };
 
     const deleteUser = (userId) => {
