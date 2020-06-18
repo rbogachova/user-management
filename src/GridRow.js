@@ -140,10 +140,8 @@ function GridRow(props) {
             <td>{savedUser.name}</td>
             <td><a href={`mailto:${savedUser.email}`}>{savedUser.email}</a></td>
             <td>
-                <strong>Street:</strong> {savedUser.address.street}<br/>
-                <strong>Suite:</strong> {savedUser.address.suite}<br/>
-                <strong>City:</strong> {savedUser.address.city}<br/>
-                <strong>Zip:</strong> {savedUser.address.zipcode}
+                {savedUser.address.street} {savedUser.address.suite}<br/>
+                {savedUser.address.city}, {savedUser.address.zipcode}
             </td>
             <td>{savedUser.phone}</td>
             <td><a href={`http://${savedUser.website}`}>{savedUser.website}</a></td>
