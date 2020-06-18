@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import GridRow from "./GridRow";
 import Modal from "react-bootstrap/Modal";
@@ -20,10 +20,30 @@ function App() {
             url: 'https://jsonplaceholder.typicode.com/users',
         })
             .then((response) => {
-                setUsers(response.data);
+                setUsers([...users, ...response.data]);
                 setIsLoading(false);
             });
     };
+
+    useEffect(() => {
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
+    const handleScroll = () => {
+        const innerHeight = window.innerHeight;
+        const scrollTop = document.documentElement.scrollTop;
+        const offsetHeight = document.documentElement.offsetHeight;
+
+        if ((innerHeight + scrollTop) !== offsetHeight) return;
+        setIsLoading(true);
+         console.log('Load more');
+    };
+
+    useEffect(() => {
+        if (!isLoading) return;
+        loadUsers();
+    }, [isLoading]);
 
     const renderLoadUsersButton = () =>
         <button className="btn btn-primary mb-3" onClick={loadUsers}>
