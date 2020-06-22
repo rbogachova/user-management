@@ -1,13 +1,29 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import axios from 'axios';
 import GridRow from "./GridRow";
 import AddUserModal from "./AddUserModal";
 import {v4 as uuidv4} from 'uuid';
 
 function App() {
+    const userNamePropertyName = 'name';
+    const userEmailPropertyName = 'email';
+    const userPhonePropertyName = 'phone';
+    const userWebsitePropertyName = 'website';
+    const userCompanyPropertyName = 'company';
+
+    const emptyFilters = {
+        [userNamePropertyName]: '',
+        [userEmailPropertyName]: '',
+        [userPhonePropertyName]: '',
+        [userWebsitePropertyName]: '',
+        [userCompanyPropertyName]: ''
+    };
+
     const [users, setUsers] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [isAddUserModalActive, setIsAddUserModalActive] = useState(false);
+    const [filters, setFilters] = useState(emptyFilters);
+    const [filteredUsers, setfilteredUsers] = useState(users);
 
     const loadUsers = () => {
         setIsLoading(true);
@@ -16,7 +32,8 @@ function App() {
             url: 'https://jsonplaceholder.typicode.com/users',
         })
             .then((response) => {
-                setUsers([...users, ...response.data]);
+                setUsers(response.data);
+                setfilteredUsers(response.data);
                 setIsLoading(false);
             });
     };
@@ -35,7 +52,7 @@ function App() {
     const renderAddUserButton = () =>
         <>
             <button className="btn btn-primary mr-2 mb-3" onClick={handleShowModal}>Add User</button>
-            <button className="btn btn-secondary mb-3">Reset all filters</button>
+            <button className="btn btn-secondary mb-3" onClick={resetFilters}>Reset all filters</button>
             <AddUserModal addUser={addUser}
                           isAddUserModalActive={isAddUserModalActive}
                           handleCloseModal={handleCloseModal}/>
@@ -65,6 +82,7 @@ function App() {
                 }
             });
         setUsers(updatedUsers);
+        setfilteredUsers(updatedUsers);
     };
 
     const handleCloseModal = () => {
@@ -74,7 +92,54 @@ function App() {
     const deleteUser = (userId) => {
         const updatedUsers = users.filter(el => el.id !== userId);
         setUsers(updatedUsers);
+        setfilteredUsers(users);
     };
+
+    const resetFilters = () => {
+        setFilters(emptyFilters);
+        setfilteredUsers(users);
+    };
+
+    const isTextEmpty = (text) =>
+        text === null ||
+        text === undefined ||
+        text.trim() === '';
+
+    const filterMatches = (filterText, value) => {
+        if (isTextEmpty(filterText))
+            return true;
+
+        if (isTextEmpty(value))
+            return false;
+
+        return value.toLowerCase().includes(filterText.trim().toLowerCase());
+    };
+
+    const filterUsers = (property, value) => {
+        const updatedFilters = {...filters};
+        updatedFilters[property] = value;
+        setFilters(updatedFilters);
+
+        const filteredUsers = users.filter(user => {
+            if (!filterMatches(filters.name, user.name))
+                return false;
+
+            if (!filterMatches(filters.email, user.email))
+                return false;
+
+            if (!filterMatches(filters.phone, user.phone))
+                return false;
+
+            if (!filterMatches(filters.website, user.website))
+                return false;
+
+            if (!filterMatches(filters.company, user.company.name))
+                return false;
+            return true;
+        });
+        setfilteredUsers(filteredUsers);
+    };
+
 
     return (
         <div className="container-fluid">
@@ -88,14 +153,18 @@ function App() {
                         <th>
                             Name
                             <div className="text-nowrap">
-                                <input type="text"/>
+                                <input type="text"
+                                       value={filters.name || ''}
+                                       onChange={e => filterUsers(userNamePropertyName, e.target.value)}/>
                                 <i className="fa fa-filter ml-2"/>
                             </div>
                         </th>
                         <th>
                             Email
                             <div className="text-nowrap">
-                                <input type="text"/>
+                                <input type="text"
+                                       value={filters.email || ''}
+                                       onChange={e => filterUsers(userEmailPropertyName, e.target.value)}/>
                                 <i className="fa fa-filter ml-2"/>
                             </div>
                         </th>
@@ -109,21 +178,27 @@ function App() {
                         <th>
                             Phone
                             <div className="text-nowrap">
-                                <input type="text"/>
+                                <input type="text"
+                                       value={filters.phone || ''}
+                                       onChange={e => filterUsers(userPhonePropertyName, e.target.value)}/>
                                 <i className="fa fa-filter ml-2"/>
                             </div>
                         </th>
                         <th>
                             Website
                             <div className="text-nowrap">
-                                <input type="text"/>
+                                <input type="text"
+                                       value={filters.website || ''}
+                                       onChange={e => filterUsers(userWebsitePropertyName, e.target.value)}/>
                                 <i className="fa fa-filter ml-2"/>
                             </div>
                         </th>
                         <th>
                             Company
                             <div className="text-nowrap">
-                                <input type="text"/>
+                                <input type="text"
+                                       value={filters.company || ''}
+                                       onChange={e => filterUsers(userCompanyPropertyName, e.target.value)}/>
                                 <i className="fa fa-filter ml-2"/>
                             </div>
                         </th>
@@ -134,12 +209,11 @@ function App() {
                 }
                 <tbody>
                 {
-                    users
-                        .map(user =>
-                            <GridRow key={user.id}
-                                     user={user}
-                                     deleteUser={deleteUser}/>
-                        )
+                    filteredUsers.map(user =>
+                        <GridRow key={user.id}
+                                 user={user}
+                                 deleteUser={deleteUser}/>
+                    )
                 }
                 </tbody>
             </table>
