@@ -26,6 +26,7 @@ function AddUserModal(props) {
             </Modal.Header>
             <Modal.Body>
                 <table>
+                    <tbody>
                     <tr>
                         <td><strong>Name*: </strong></td>
                         <td><input type="text" onChange={e => setName(e.target.value)}/></td>
@@ -38,6 +39,7 @@ function AddUserModal(props) {
                         <td><strong>Company*: </strong></td>
                         <td><input type="text" onChange={e => setCompany(e.target.value)}/></td>
                     </tr>
+                    </tbody>
                 </table>
             </Modal.Body>
             <Modal.Footer>

@@ -56,7 +56,8 @@ function GridRow(props) {
                        onKeyPress={onEnterPress}/>
             </td>
             <td>
-                <table>
+                <table class="table-borderless">
+                    <tbody>
                     <tr>
                         <td><strong>Street: </strong></td>
                         <td>
@@ -105,6 +106,7 @@ function GridRow(props) {
                                    onKeyPress={onEnterPress}/>
                         </td>
                     </tr>
+                    </tbody>
                 </table>
             </td>
             <td>
@@ -128,7 +130,7 @@ function GridRow(props) {
                        })}
                        onKeyPress={onEnterPress}/>
             </td>
-            <td>
+            <td className="text-nowrap">
                 <button className="btn btn-sm btn-light fa fa-check mr-2" onClick={onSaveButtonClick}/>
                 <button type="button" className="btn btn-sm btn-light fa fa-times" onClick={onCancelButtonClick}/>
             </td>
@@ -146,7 +148,7 @@ function GridRow(props) {
             <td>{savedUser.phone}</td>
             <td><a href={`http://${savedUser.website}`}>{savedUser.website}</a></td>
             <td>{savedUser.company.name}</td>
-            <td>
+            <td className="text-nowrap">
                 <button className="btn btn-sm btn-light fa fa-pencil mr-2" onClick={onEditButtonClick}/>
                 <button className="btn btn-sm btn-light fa fa-trash" onClick={handleShowModal}/>
                 <Modal show={deleteUserModalActive} onHide={handleCloseModal}>

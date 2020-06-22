@@ -9,25 +9,6 @@ function App() {
     const [isLoading, setIsLoading] = useState(false);
     const [isAddUserModalActive, setIsAddUserModalActive] = useState(false);
 
-    useEffect(() => {
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
-
-    const handleScroll = () => {
-        const innerHeight = window.innerHeight;
-        const scrollTop = document.documentElement.scrollTop;
-        const offsetHeight = document.documentElement.offsetHeight;
-
-        if ((innerHeight + scrollTop) !== offsetHeight) return;
-        setIsLoading(true);
-    };
-
-    useEffect(() => {
-        if (!isLoading) return;
-        loadUsers();
-    }, [isLoading]);
-
     const loadUsers = () => {
         setIsLoading(true);
         axios({
@@ -45,7 +26,7 @@ function App() {
             {isLoading
                 ?
                 <>
-                    <span class="spinner-border spinner-border-sm"/>
+                    <span className="spinner-border spinner-border-sm"/>
                     Loading...
                 </>
                 : 'Load Users'}
@@ -54,6 +35,7 @@ function App() {
     const renderAddUserButton = () =>
         <>
             <button className="btn btn-primary mr-2 mb-3" onClick={handleShowModal}>Add User</button>
+            <button className="btn btn-secondary mb-3">Reset all filters</button>
             <AddUserModal addUser={addUser}
                           isAddUserModalActive={isAddUserModalActive}
                           handleCloseModal={handleCloseModal}/>
@@ -97,32 +79,67 @@ function App() {
     return (
         <div className="container-fluid">
             <h2>Users</h2>
-
             {users.length === 0 ? renderLoadUsersButton() : renderAddUserButton()}
-
             <table className="table table-bordered">
                 {
                     users.length !== 0 &&
                     <thead className="thead-light">
                     <tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Address</th>
-                        <th>Phone</th>
-                        <th>Website</th>
-                        <th>Company</th>
-                        <th/>
+                        <th>
+                            Name
+                            <div className="text-nowrap">
+                                <input type="text"/>
+                                <i className="fa fa-filter ml-2"/>
+                            </div>
+                        </th>
+                        <th>
+                            Email
+                            <div className="text-nowrap">
+                                <input type="text"/>
+                                <i className="fa fa-filter ml-2"/>
+                            </div>
+                        </th>
+                        <th>
+                            Address
+                            <div className="text-nowrap">
+                                <input type="text"/>
+                                <i className="fa fa-filter ml-2"/>
+                            </div>
+                        </th>
+                        <th>
+                            Phone
+                            <div className="text-nowrap">
+                                <input type="text"/>
+                                <i className="fa fa-filter ml-2"/>
+                            </div>
+                        </th>
+                        <th>
+                            Website
+                            <div className="text-nowrap">
+                                <input type="text"/>
+                                <i className="fa fa-filter ml-2"/>
+                            </div>
+                        </th>
+                        <th>
+                            Company
+                            <div className="text-nowrap">
+                                <input type="text"/>
+                                <i className="fa fa-filter ml-2"/>
+                            </div>
+                        </th>
+                        <th>
+                        </th>
                     </tr>
                     </thead>
                 }
-
                 <tbody>
                 {
-                    users.map(user =>
-                        <GridRow key={user.id}
-                                 user={user}
-                                 deleteUser={deleteUser}/>
-                    )
+                    users
+                        .map(user =>
+                            <GridRow key={user.id}
+                                     user={user}
+                                     deleteUser={deleteUser}/>
+                        )
                 }
                 </tbody>
             </table>
