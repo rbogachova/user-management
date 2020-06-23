@@ -5,13 +5,13 @@ import Modal from 'react-bootstrap/Modal';
 function AddUserModal(props) {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
-    const [companyName, setcompanyName] = useState('');
+    const [companyName, setCompanyName] = useState('');
 
     const handleCloseModal = () => {
         props.handleCloseModal();
         setName('');
         setEmail('');
-        setcompanyName('');
+        setCompanyName('');
     };
 
     const handleAddUser = () => {
@@ -37,7 +37,7 @@ function AddUserModal(props) {
                     </tr>
                     <tr>
                         <td><strong>Company*: </strong></td>
-                        <td><input type="text" onChange={e => setCompany(e.target.value)}/></td>
+                        <td><input type="text" onChange={e => setCompanyName(e.target.value)}/></td>
                     </tr>
                     </tbody>
                 </table>

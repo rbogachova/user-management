@@ -23,7 +23,7 @@ function App() {
     const [isLoading, setIsLoading] = useState(false);
     const [isAddUserModalActive, setIsAddUserModalActive] = useState(false);
     const [filters, setFilters] = useState(emptyFilters);
-    const [filteredUsers, setfilteredUsers] = useState(users);
+    const [filteredUsers, setFilteredUsers] = useState(users);
 
     const loadUsers = () => {
         setIsLoading(true);
@@ -33,7 +33,7 @@ function App() {
         })
             .then((response) => {
                 setUsers(response.data);
-                setfilteredUsers(response.data);
+                setFilteredUsers(response.data);
                 setIsLoading(false);
             });
     };
@@ -62,7 +62,7 @@ function App() {
         setIsAddUserModalActive(true);
     };
 
-    const addUser = (name, email, company) => {
+    const addUser = (name, email, companyName) => {
         const updatedUsers = [...users];
         updatedUsers.unshift(
             {
@@ -78,11 +78,11 @@ function App() {
                 phone: null,
                 website: null,
                 company: {
-                    name: company
+                    name: companyName
                 }
             });
         setUsers(updatedUsers);
-        setfilteredUsers(updatedUsers);
+        setFilteredUsers(updatedUsers);
     };
 
     const handleCloseModal = () => {
@@ -92,12 +92,12 @@ function App() {
     const deleteUser = (userId) => {
         const updatedUsers = users.filter(el => el.id !== userId);
         setUsers(updatedUsers);
-        setfilteredUsers(users);
+        setFilteredUsers(updatedUsers);
     };
 
     const resetFilters = () => {
         setFilters(emptyFilters);
-        setfilteredUsers(users);
+        setFilteredUsers(users);
     };
 
     const isTextEmpty = (text) =>
@@ -121,23 +121,23 @@ function App() {
         setFilters(updatedFilters);
 
         const filteredUsers = users.filter(user => {
-            if (!filterMatches(filters.name, user.name))
+            if (!filterMatches(updatedFilters.name, user.name))
                 return false;
 
-            if (!filterMatches(filters.email, user.email))
+            if (!filterMatches(updatedFilters.email, user.email))
                 return false;
 
-            if (!filterMatches(filters.phone, user.phone))
+            if (!filterMatches(updatedFilters.phone, user.phone))
                 return false;
 
-            if (!filterMatches(filters.website, user.website))
+            if (!filterMatches(updatedFilters.website, user.website))
                 return false;
 
-            if (!filterMatches(filters.company, user.company.name))
+            if (!filterMatches(updatedFilters.company, user.company.name))
                 return false;
             return true;
         });
-        setfilteredUsers(filteredUsers);
+        setFilteredUsers(filteredUsers);
     };
 
 
