@@ -165,7 +165,7 @@ function GridRow(props) {
                     <Modal.Header closeButton>
                         <Modal.Title>Are you sure you want to delete user?</Modal.Title>
                     </Modal.Header>
-                    <Modal.Body>{props.user.name}</Modal.Body>
+                    <Modal.Body>{savedUser.name}</Modal.Body>
                     <Modal.Footer>
                         <Button variant="primary" onClick={handleDeleteButtonClick}>OK</Button>
                         <Button variant="secondary" onClick={handleCloseModal}>Cancel</Button>
