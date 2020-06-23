@@ -212,7 +212,8 @@ function App() {
                     filteredUsers.map(user =>
                         <GridRow key={user.id}
                                  user={user}
-                                 deleteUser={deleteUser}/>
+                                 deleteUser={deleteUser}
+                                 isTextEmpty={isTextEmpty}/>
                     )
                 }
                 </tbody>

@@ -56,7 +56,7 @@ function GridRow(props) {
                        onKeyPress={onEnterPress}/>
             </td>
             <td>
-                <table class="table-borderless">
+                <table className="table-borderless">
                     <tbody>
                     <tr>
                         <td><strong>Street: </strong></td>
@@ -143,7 +143,17 @@ function GridRow(props) {
             <td><a href={`mailto:${savedUser.email}`}>{savedUser.email}</a></td>
             <td>
                 {savedUser.address.street} {savedUser.address.suite}<br/>
-                {savedUser.address.city}, {savedUser.address.zipcode}
+                {
+                    !props.isTextEmpty(savedUser.address.city) && !props.isTextEmpty(savedUser.address.zipcode)
+                        ?
+                        <>
+                            {savedUser.address.city}, {savedUser.address.zipcode}
+                        </>
+                        :
+                        <>
+                            {savedUser.address.city} {savedUser.address.zipcode}
+                        </>
+                }
             </td>
             <td>{savedUser.phone}</td>
             <td><a href={`http://${savedUser.website}`}>{savedUser.website}</a></td>
