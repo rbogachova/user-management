@@ -7,6 +7,7 @@ import {v4 as uuidv4} from 'uuid';
 function App() {
     const userNamePropertyName = 'name';
     const userEmailPropertyName = 'email';
+    const userAddressPropertyName = 'address';
     const userPhonePropertyName = 'phone';
     const userWebsitePropertyName = 'website';
     const userCompanyPropertyName = 'company';
@@ -14,6 +15,7 @@ function App() {
     const emptyFilters = {
         [userNamePropertyName]: '',
         [userEmailPropertyName]: '',
+        [userAddressPropertyName]: '',
         [userPhonePropertyName]: '',
         [userWebsitePropertyName]: '',
         [userCompanyPropertyName]: ''
@@ -127,6 +129,12 @@ function App() {
             if (!filterMatches(updatedFilters.email, user.email))
                 return false;
 
+            if (!filterMatches(updatedFilters.address, user.address.street) &&
+                !filterMatches(updatedFilters.address, user.address.suite) &&
+                !filterMatches(updatedFilters.address, user.address.city) &&
+                !filterMatches(updatedFilters.address, user.address.zipcode))
+                return false;
+
             if (!filterMatches(updatedFilters.phone, user.phone))
                 return false;
 
@@ -171,7 +179,9 @@ function App() {
                         <th>
                             Address
                             <div className="text-nowrap">
-                                <input type="text"/>
+                                <input type="text"
+                                       value={filters.address || ''}
+                                       onChange={e => filterUsers(userAddressPropertyName, e.target.value)}/>
                                 <i className="fa fa-filter ml-2"/>
                             </div>
                         </th>
