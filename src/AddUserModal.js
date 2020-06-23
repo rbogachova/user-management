@@ -5,18 +5,18 @@ import Modal from 'react-bootstrap/Modal';
 function AddUserModal(props) {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
-    const [company, setCompany] = useState('');
+    const [companyName, setcompanyName] = useState('');
 
     const handleCloseModal = () => {
         props.handleCloseModal();
         setName('');
         setEmail('');
-        setCompany('');
+        setcompanyName('');
     };
 
     const handleAddUser = () => {
         handleCloseModal();
-        props.addUser(name, email, company);
+        props.addUser(name, email, companyName);
     };
 
     return (
@@ -44,7 +44,7 @@ function AddUserModal(props) {
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="primary" onClick={handleAddUser}
-                        disabled={name.trim().length < 3 || email.trim().length < 3 || company.trim().length < 3}>
+                        disabled={name.trim().length < 3 || email.trim().length < 3 || companyName.trim().length < 3}>
                     OK
                 </Button>
                 <Button variant="secondary" onClick={handleCloseModal}>Cancel</Button>
